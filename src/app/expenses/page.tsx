@@ -6,24 +6,16 @@ import FilterBar from '@/components/FilterBar';
 import ExpenseList from '@/components/ExpenseList';
 import Modal from '@/components/Modal';
 import ExpenseForm from '@/components/ExpenseForm';
+import ExportDrawer from '@/components/ExportDrawer';
 import { useExpenses } from '@/context/ExpenseContext';
-import { exportToCSV } from '@/utils/export';
 import { formatCurrency } from '@/utils/formatters';
 
 export default function ExpensesPage() {
-  const { filteredExpenses, showToast } = useExpenses();
+  const { filteredExpenses } = useExpenses();
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showExport, setShowExport] = useState(false);
 
   const total = filteredExpenses.reduce((s, e) => s + e.amount, 0);
-
-  function handleExport() {
-    if (filteredExpenses.length === 0) {
-      showToast('No expenses to export', 'error');
-      return;
-    }
-    exportToCSV(filteredExpenses);
-    showToast(`Exported ${filteredExpenses.length} expenses to CSV`);
-  }
 
   return (
     <div className="space-y-5">
@@ -38,11 +30,11 @@ export default function ExpensesPage() {
         </div>
         <div className="flex items-center gap-2">
           <button
-            onClick={handleExport}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-sm font-medium transition-colors shadow-sm"
+            onClick={() => setShowExport(true)}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-700 text-slate-700 text-sm font-medium transition-colors shadow-sm group"
           >
-            <Download size={15} />
-            Export CSV
+            <Download size={15} className="group-hover:text-indigo-600 transition-colors" />
+            Export
           </button>
           <button
             onClick={() => setShowAddModal(true)}
@@ -59,13 +51,16 @@ export default function ExpensesPage() {
         <FilterBar />
       </div>
 
-      {/* Expense list (no built-in add button — we have it in the header) */}
+      {/* Expense list */}
       <ExpenseList showAddButton={false} />
 
       {/* Add Expense Modal */}
       <Modal isOpen={showAddModal} onClose={() => setShowAddModal(false)} title="Add Expense">
         <ExpenseForm onClose={() => setShowAddModal(false)} />
       </Modal>
+
+      {/* Export Drawer */}
+      <ExportDrawer isOpen={showExport} onClose={() => setShowExport(false)} />
     </div>
   );
 }

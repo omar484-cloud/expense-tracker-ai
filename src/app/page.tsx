@@ -1,19 +1,21 @@
 'use client';
 
 import { useState } from 'react';
-import { PlusCircle, Sparkles, Trash2 } from 'lucide-react';
+import { PlusCircle, Sparkles, Trash2, Download } from 'lucide-react';
 import SummaryCards from '@/components/SummaryCards';
 import CategoryChart from '@/components/CategoryChart';
 import MonthlyChart from '@/components/MonthlyChart';
 import ExpenseList from '@/components/ExpenseList';
 import Modal from '@/components/Modal';
 import ExpenseForm from '@/components/ExpenseForm';
+import ExportDrawer from '@/components/ExportDrawer';
 import { useExpenses } from '@/context/ExpenseContext';
 
 export default function DashboardPage() {
   const { expenses, loadSampleData, clearAllData, isLoaded } = useExpenses();
   const [showAddModal, setShowAddModal] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [showExport, setShowExport] = useState(false);
 
   return (
     <div className="space-y-6">
@@ -48,6 +50,15 @@ export default function DashboardPage() {
               Clear Data
             </button>
           )}
+          {expenses.length > 0 && (
+            <button
+              onClick={() => setShowExport(true)}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-700 text-slate-700 text-sm font-medium transition-colors shadow-sm group"
+            >
+              <Download size={15} className="group-hover:text-indigo-600 transition-colors" />
+              Export
+            </button>
+          )}
           <button
             onClick={() => setShowAddModal(true)}
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-colors shadow-sm shadow-indigo-200"
@@ -74,6 +85,9 @@ export default function DashboardPage() {
       <Modal isOpen={showAddModal} onClose={() => setShowAddModal(false)} title="Add Expense">
         <ExpenseForm onClose={() => setShowAddModal(false)} />
       </Modal>
+
+      {/* Export Drawer */}
+      <ExportDrawer isOpen={showExport} onClose={() => setShowExport(false)} />
 
       {/* Clear confirmation */}
       <Modal
