@@ -1,81 +1,123 @@
 export type Category =
-  | 'Food'
-  | 'Transportation'
-  | 'Entertainment'
-  | 'Shopping'
-  | 'Bills'
-  | 'Other';
+  | 'food'
+  | 'transport'
+  | 'entertainment'
+  | 'shopping'
+  | 'bills'
+  | 'health'
+  | 'other';
 
 export interface Expense {
   id: string;
-  date: string; // YYYY-MM-DD
   amount: number;
-  category: Category;
   description: string;
+  category: Category;
+  date: string; // YYYY-MM-DD
   createdAt: string;
-  updatedAt: string;
+  raw?: string; // original typed text
 }
 
-export interface ExpenseFilters {
-  search: string;
-  category: Category | 'All';
-  dateFrom: string;
-  dateTo: string;
-  sortBy: 'date' | 'amount' | 'category';
-  sortOrder: 'asc' | 'desc';
-  preset: 'all' | 'thisMonth' | 'lastMonth' | 'last3Months' | 'thisYear' | 'custom';
+export interface Budget {
+  [key: string]: number;
 }
 
 export const CATEGORIES: Category[] = [
-  'Food',
-  'Transportation',
-  'Entertainment',
-  'Shopping',
-  'Bills',
-  'Other',
+  'food',
+  'transport',
+  'entertainment',
+  'shopping',
+  'bills',
+  'health',
+  'other',
 ];
 
-export const CATEGORY_COLORS: Record<Category, string> = {
-  Food: '#f97316',
-  Transportation: '#3b82f6',
-  Entertainment: '#a855f7',
-  Shopping: '#ec4899',
-  Bills: '#ef4444',
-  Other: '#6b7280',
+export const CATEGORY_META: Record<
+  Category,
+  { label: string; color: string; bg: string; keywords: string[]; emoji: string }
+> = {
+  food: {
+    label: 'Food & Drink',
+    color: '#f59e0b',
+    bg: 'rgba(245,158,11,0.12)',
+    keywords: [
+      'coffee', 'lunch', 'dinner', 'breakfast', 'restaurant', 'cafe', 'food',
+      'eat', 'meal', 'pizza', 'burger', 'sushi', 'bar', 'drink', 'beer',
+      'starbucks', 'chipotle', 'mcdonalds', 'grocery', 'groceries',
+      'whole foods', 'trader joe', 'doordash', 'ubereats', 'grubhub',
+      'takeout', 'snack', 'bakery', 'brunch', 'taco', 'sandwich',
+    ],
+    emoji: '🍕',
+  },
+  transport: {
+    label: 'Transport',
+    color: '#60a5fa',
+    bg: 'rgba(96,165,250,0.12)',
+    keywords: [
+      'uber', 'lyft', 'gas', 'parking', 'metro', 'bus', 'train', 'subway',
+      'taxi', 'car', 'fuel', 'transit', 'flight', 'airline', 'travel',
+      'toll', 'bike', 'scooter', 'rental', 'airport',
+    ],
+    emoji: '🚗',
+  },
+  entertainment: {
+    label: 'Entertainment',
+    color: '#a78bfa',
+    bg: 'rgba(167,139,250,0.12)',
+    keywords: [
+      'netflix', 'spotify', 'movie', 'cinema', 'game', 'gaming', 'concert',
+      'show', 'ticket', 'museum', 'amazon prime', 'hulu', 'disney', 'youtube',
+      'twitch', 'steam', 'apple tv', 'hbo', 'max', 'paramount', 'peacock',
+    ],
+    emoji: '🎮',
+  },
+  shopping: {
+    label: 'Shopping',
+    color: '#f472b6',
+    bg: 'rgba(244,114,182,0.12)',
+    keywords: [
+      'amazon', 'clothes', 'clothing', 'shoes', 'shirt', 'pants', 'dress',
+      'shop', 'store', 'target', 'walmart', 'mall', 'online', 'order',
+      'bought', 'ikea', 'ebay', 'etsy', 'h&m', 'zara',
+    ],
+    emoji: '🛍️',
+  },
+  bills: {
+    label: 'Bills',
+    color: '#fb923c',
+    bg: 'rgba(251,146,60,0.12)',
+    keywords: [
+      'rent', 'electric', 'electricity', 'water', 'internet', 'phone',
+      'utility', 'insurance', 'subscription', 'bill', 'mortgage', 'gym',
+      'membership', 'comcast', 'verizon', 'at&t', 'cable',
+    ],
+    emoji: '📋',
+  },
+  health: {
+    label: 'Health',
+    color: '#34d399',
+    bg: 'rgba(52,211,153,0.12)',
+    keywords: [
+      'doctor', 'pharmacy', 'medicine', 'gym', 'fitness', 'hospital',
+      'dental', 'health', 'medical', 'cvs', 'walgreens', 'prescription',
+      'workout', 'vitamin', 'therapy', 'dentist',
+    ],
+    emoji: '💊',
+  },
+  other: {
+    label: 'Other',
+    color: '#94a3b8',
+    bg: 'rgba(148,163,184,0.12)',
+    keywords: [],
+    emoji: '📌',
+  },
 };
 
-export const CATEGORY_LIGHT_COLORS: Record<Category, string> = {
-  Food: '#fff7ed',
-  Transportation: '#eff6ff',
-  Entertainment: '#faf5ff',
-  Shopping: '#fdf2f8',
-  Bills: '#fff1f2',
-  Other: '#f9fafb',
-};
-
-export const CATEGORY_TEXT_COLORS: Record<Category, string> = {
-  Food: 'text-orange-600',
-  Transportation: 'text-blue-600',
-  Entertainment: 'text-purple-600',
-  Shopping: 'text-pink-600',
-  Bills: 'text-red-600',
-  Other: 'text-gray-600',
-};
-
-export const CATEGORY_BADGE_CLASSES: Record<Category, string> = {
-  Food: 'bg-orange-100 text-orange-700 ring-orange-200',
-  Transportation: 'bg-blue-100 text-blue-700 ring-blue-200',
-  Entertainment: 'bg-purple-100 text-purple-700 ring-purple-200',
-  Shopping: 'bg-pink-100 text-pink-700 ring-pink-200',
-  Bills: 'bg-red-100 text-red-700 ring-red-200',
-  Other: 'bg-gray-100 text-gray-700 ring-gray-200',
-};
-
-export const CATEGORY_ICONS: Record<Category, string> = {
-  Food: '🍔',
-  Transportation: '🚗',
-  Entertainment: '🎬',
-  Shopping: '🛍️',
-  Bills: '📄',
-  Other: '📦',
+export const DEFAULT_BUDGETS: Budget = {
+  food: 400,
+  transport: 150,
+  entertainment: 100,
+  shopping: 200,
+  bills: 800,
+  health: 100,
+  other: 150,
 };
